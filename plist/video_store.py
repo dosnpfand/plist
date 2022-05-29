@@ -4,7 +4,7 @@ from typing import List, Union
 
 from tqdm import tqdm
 
-from plist.tools import TT
+from plist.tools import StopWatch
 from plist.video_file import VideoFile
 
 
@@ -34,11 +34,11 @@ class VideoStore:
             full_db = dict()
 
         # load files from filesystem
-        with TT("filewalk"):
+        with StopWatch("filewalk"):
             candidate_paths = self.grab_files_from_disk()
 
         modified = False
-        with TT("populate Videostore"):
+        with StopWatch("populate Videostore"):
             for idx, path in tqdm(
                 enumerate(candidate_paths), total=len(candidate_paths)
             ):
@@ -66,7 +66,7 @@ class VideoStore:
         print("found %i files" % len(self.local_db))
 
     def get_file_list(self):
-        with TT("sort by modification time"):
+        with StopWatch("sort by modification time"):
             flist = [self.local_db[key] for key in self.local_db]
             flist.sort(
                 key=lambda el: el.stat.st_ctime, reverse=True

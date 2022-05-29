@@ -1,7 +1,11 @@
 import time
 
 
-class TT:
+class StopWatch:
+    """
+    Context manager for stopping duration of tasks.
+    """
+
     def __init__(self, info):
         self.info = info
 
