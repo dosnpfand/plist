@@ -4,8 +4,8 @@ from typing import List, Union
 
 from tqdm import tqdm
 
-from tools import TT
-from video_file import VideoFile
+from plist.tools import TT
+from plist.video_file import VideoFile
 
 
 class VideoStore:
@@ -13,7 +13,7 @@ class VideoStore:
     Cache list of videofiles (extracting duration takes time)
     """
 
-    def __init__(self, cache_file_name='video_store.pkl'):
+    def __init__(self, cache_file_name='video_store_2.pkl'):
         """
         The constructor initializes the VideoStore by loading the old state from the .pkl
         and retrieving a list of video files from the cwd.

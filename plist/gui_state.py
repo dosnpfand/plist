@@ -2,9 +2,9 @@ import os
 from datetime import timedelta
 from typing import List
 
-from platform_defs import KEY_BACKSPACE
-from video_file import VideoFile
-from video_store import VideoStore
+from plist.platform_defs import KEY_BACKSPACE
+from plist.video_file import VideoFile
+from plist.video_store import VideoStore
 
 
 class GUIState:
