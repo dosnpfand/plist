@@ -13,9 +13,13 @@ else:
         r"C:\Program Files\VideoLAN\VLC\vlc.exe",
     ]
 
+    vlc_exec = None
     for fpath in exec_list:
         if os.path.exists(fpath):
             vlc_exec = fpath
             break
+
+    if vlc_exec is None:
+        raise FileNotFoundError("Cannot find vlc executable")
 
     CMD = f'"{vlc_exec}" --fullscreen'
