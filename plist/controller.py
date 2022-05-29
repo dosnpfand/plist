@@ -13,14 +13,13 @@ class PlistController:
     Controls GUI.
     """
 
-    def __init__(self, opts):
+    def __init__(self, playlist_path: str):
 
-        self.opts = opts
+        self.playlist_path = playlist_path
         video_store = VideoStore()
-        # detect fideofiles recursively from os.cwd()
 
         self.state = GUIState(video_store.get_file_list())
-        self.state.restore_from_playlist(opts["target"], video_store)
+        self.state.restore_from_playlist(playlist_path, video_store)
 
         self.gui = MyCursesGUI(self)
         self.gui.start()  # blocking.
@@ -33,7 +32,7 @@ class PlistController:
         if self.state.mode == GUIState.PLAY:
 
             self.write_playlist()
-            cmd = f"{CMD} {self.opts['target']}"
+            cmd = f"{CMD} {playlist_path}"
             print(cmd)
             os.system(cmd)
 
@@ -51,7 +50,7 @@ class PlistController:
             if os.path.isfile(entry):
                 output_file.write("{}\n".format(entry))
 
-        with open(self.opts["target"], "w") as output_file:
+        with open(self.playlist_path, "w") as output_file:
             for obj in self.state.play_list:
                 if type(obj) is not list:
                     write_single_entry(output_file, obj)

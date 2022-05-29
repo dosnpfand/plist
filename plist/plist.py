@@ -1,24 +1,22 @@
 import os
-import sys
+
+import click
+
 from plist.controller import PlistController
 
 
-def main():
-    str_opts = [s for s in sys.argv if "=" in s]
-    opts = dict()
-    for s in str_opts:
-        k = s.split("=")[0]
-        v = s.split("=")[1]
-        opts[k] = v
+@click.command
+@click.option(
+    "--playlist", "-p", help="specify location to write playlist to", required=True
+)
+@click.option(
+    "--working-directory", "-w", help="Where to look for video files", default="."
+)
+def main(playlist: str, working_directory: str):
+    if working_directory != ".":
+        os.chdir(working_directory)
 
-    if "target" not in opts.keys():
-        print("specify location to write playlist to using target=")
-        sys.exit(0)
-
-    if "wd" in opts.keys():
-        os.chdir(opts["wd"])
-
-    PlistController(opts)
+    PlistController(playlist)
 
 
 if __name__ == "__main__":
