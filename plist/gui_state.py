@@ -21,10 +21,10 @@ class GUIState:
     WRITE = 6
 
     mode_str = {
-        INPUT: '[INPUT: ENTER - add | ESC - CMD]',
-        CMD: '[CMD: m - mod | q | w | p - play | r - reset]',
-        NAVIGATE_PLAYLIST: '[PL-NAV: m - move | d - del]',
-        MOVE_PLAYLIST_ENTRIES: '[PL-MOV: m - nav | d - del]',
+        INPUT: "[INPUT: ENTER - add | ESC - CMD]",
+        CMD: "[CMD: m - mod | q | w | p - play | r - reset]",
+        NAVIGATE_PLAYLIST: "[PL-NAV: m - move | d - del]",
+        MOVE_PLAYLIST_ENTRIES: "[PL-MOV: m - nav | d - del]",
     }
 
     def __init__(self, all_files: List[VideoFile]):
@@ -82,11 +82,13 @@ class GUIState:
         self.candidate_files = self.all_files
 
     def update_candidate_files(self):
-        words = self.search_str.split(' ')
-        self.candidate_files = [f for f in self.all_files if all(w.lower() in f.path.lower() for w in words)]
+        words = self.search_str.split(" ")
+        self.candidate_files = [
+            f for f in self.all_files if all(w.lower() in f.path.lower() for w in words)
+        ]
 
     def add_candidate(self, idx):
-        """ Adds self.candidate_files[idx] to self.play_list
+        """Adds self.candidate_files[idx] to self.play_list
         Args:
             idx: index
         """
@@ -112,7 +114,7 @@ class GUIState:
                 acc += el
 
         minutes = acc.total_seconds() // 60
-        seconds = int(acc.total_seconds() - minutes*60)
+        seconds = int(acc.total_seconds() - minutes * 60)
 
         return f"({minutes:0.0f}:{seconds:02d})"
 
@@ -120,7 +122,7 @@ class GUIState:
         if self.selected_line > 0:
             self.selected_line -= 1
             if self.mode == self.MOVE_PLAYLIST_ENTRIES:
-                self.swap(self.selected_line+1, self.selected_line)
+                self.swap(self.selected_line + 1, self.selected_line)
         else:
             if not self.mode == self.MOVE_PLAYLIST_ENTRIES:
                 self.selected_line = len(self.play_list) - 1
@@ -132,11 +134,13 @@ class GUIState:
         else:
             self.selected_line += 1
             if self.mode == self.MOVE_PLAYLIST_ENTRIES:
-                self.swap(self.selected_line-1, self.selected_line)
+                self.swap(self.selected_line - 1, self.selected_line)
 
     def swap(self, idx_1, idx_2):
-        self.play_list[idx_1], self.play_list[idx_2] = \
-            self.play_list[idx_2], self.play_list[idx_1]
+        self.play_list[idx_1], self.play_list[idx_2] = (
+            self.play_list[idx_2],
+            self.play_list[idx_1],
+        )
 
     def toggle_playlist_mode(self):
         if self.mode == GUIState.NAVIGATE_PLAYLIST:
@@ -173,15 +177,15 @@ class GUIState:
 
         # parse playlist
         if os.path.exists(playlist_path):
-            with open(playlist_path, 'r') as f:
+            with open(playlist_path, "r") as f:
 
                 group_add = False
                 for line in f.readlines():
-                    if '# group_start' in line:
+                    if "# group_start" in line:
                         tmp_acc = []
                         group_add = True
 
-                    elif '# group_end' in line:
+                    elif "# group_end" in line:
                         self.play_list.append(tmp_acc)
                         group_add = False
 

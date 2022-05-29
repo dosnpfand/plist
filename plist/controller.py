@@ -10,8 +10,9 @@ from plist.video_store import VideoStore
 
 class PlistController:
     """gets commands, e.g. from curses and knows how to react to them.
-        Controls GUI.
+    Controls GUI.
     """
+
     def __init__(self, opts):
 
         self.opts = opts
@@ -19,7 +20,7 @@ class PlistController:
         # detect fideofiles recursively from os.cwd()
 
         self.state = GUIState(video_store.get_file_list())
-        self.state.restore_from_playlist(opts['target'], video_store)
+        self.state.restore_from_playlist(opts["target"], video_store)
 
         self.gui = MyCursesGUI(self)
         self.gui.start()  # blocking.
@@ -50,15 +51,15 @@ class PlistController:
             if os.path.isfile(entry):
                 output_file.write("{}\n".format(entry))
 
-        with open(self.opts['target'], 'w') as output_file:
+        with open(self.opts["target"], "w") as output_file:
             for obj in self.state.play_list:
                 if type(obj) is not list:
                     write_single_entry(output_file, obj)
                 else:
-                    output_file.write('# group_start\n')
+                    output_file.write("# group_start\n")
                     for fname in obj:
                         write_single_entry(output_file, fname)
-                    output_file.write('# group_end\n')
+                    output_file.write("# group_end\n")
 
     def key_pressed(self, c):
         """This is the only method that is supposed to handle keypresses.
@@ -91,10 +92,10 @@ class PlistController:
                 self.state.history_down()
 
             if c == curses.KEY_LEFT:
-                self.state.gui_request('candlist_left')
+                self.state.gui_request("candlist_left")
 
             if c == curses.KEY_RIGHT:
-                self.state.gui_request('candlist_right')
+                self.state.gui_request("candlist_right")
         #
         # CMD
         #
@@ -103,54 +104,56 @@ class PlistController:
             if c == 27:  # ESC
                 self.state.set_mode(GUIState.INPUT)
 
-            if chr(c) == 'm':
+            if chr(c) == "m":
                 self.state.selected_line = 0
                 self.state.set_mode(GUIState.NAVIGATE_PLAYLIST)
 
-            if chr(c) == 'w':  # write out results
+            if chr(c) == "w":  # write out results
                 self.state.mode = GUIState.WRITE
                 self.state.exit_GUI = True
 
-            if chr(c) == 'p':  # play using some player
+            if chr(c) == "p":  # play using some player
                 self.state.mode = GUIState.PLAY
                 self.state.exit_GUI = True
 
-            if chr(c) == 'q':  # quit without action
+            if chr(c) == "q":  # quit without action
                 self.state.exit_GUI = True
 
-            if chr(c) == 'r':  # reset playlist
+            if chr(c) == "r":  # reset playlist
                 self.state.reset_state()
 
             # 0-9: select this from candidates
             if c in range(48, 58):
                 idx = int(chr(c))
-                self.state.add_candidate(idx-1 if idx != 0 else 9)
+                self.state.add_candidate(idx - 1 if idx != 0 else 9)
                 self.state.set_mode(GUIState.INPUT)
 
             # select all as list into one slot
-            if chr(c) == '*':
+            if chr(c) == "*":
                 self.state.add_all_candidates()
                 self.state.set_mode(GUIState.INPUT)
 
         #
         # PLAYLIST NAV & MOVE
         #
-        elif self.state.mode == GUIState.NAVIGATE_PLAYLIST\
-                or self.state.mode == GUIState.MOVE_PLAYLIST_ENTRIES:
+        elif (
+            self.state.mode == GUIState.NAVIGATE_PLAYLIST
+            or self.state.mode == GUIState.MOVE_PLAYLIST_ENTRIES
+        ):
 
             # ESC: terminate without doing anything
             if c == 27:
                 self.state.set_mode(GUIState.INPUT)
                 self.state.selected_line = -1
 
-            if chr(c) == 'k':  # 259:  cursor UP
+            if chr(c) == "k":  # 259:  cursor UP
                 self.state.playlist_cursor_up()
 
-            if chr(c) == 'j':  # cursor DOWN
+            if chr(c) == "j":  # cursor DOWN
                 self.state.playlist_cursor_down()
 
-            if chr(c) == 'm':
+            if chr(c) == "m":
                 self.state.toggle_playlist_mode()
 
-            if chr(c) == 'd':
+            if chr(c) == "d":
                 self.state.remove_selected_line_from_playlist()

@@ -13,7 +13,7 @@ class VideoStore:
     Cache list of videofiles (extracting duration takes time)
     """
 
-    def __init__(self, cache_file_name='video_store_2.pkl'):
+    def __init__(self, cache_file_name="video_store_2.pkl"):
         """
         The constructor initializes the VideoStore by loading the old state from the .pkl
         and retrieving a list of video files from the cwd.
@@ -28,18 +28,20 @@ class VideoStore:
         self.cache_file_name = cache_file_name
         local_db = dict()
         try:
-            with open(cache_file_name, 'rb') as f:
+            with open(cache_file_name, "rb") as f:
                 full_db = pickle.load(f)
         except IOError:
             full_db = dict()
 
         # load files from filesystem
-        with TT('filewalk'):
+        with TT("filewalk"):
             candidate_paths = self.grab_files_from_disk()
 
         modified = False
-        with TT('populate Videostore'):
-            for idx, path in tqdm(enumerate(candidate_paths), total=len(candidate_paths)):
+        with TT("populate Videostore"):
+            for idx, path in tqdm(
+                enumerate(candidate_paths), total=len(candidate_paths)
+            ):
 
                 el = VideoFile(path)
                 canonical_path = el.canonical_path
@@ -52,11 +54,11 @@ class VideoStore:
                     local_db[canonical_path] = full_db[canonical_path]
 
                 if idx % 10 == 0 and modified:
-                    with open(self.cache_file_name, 'wb') as f:
+                    with open(self.cache_file_name, "wb") as f:
                         pickle.dump(full_db, f)
                         modified = False
 
-        with open(self.cache_file_name, 'wb') as f:
+        with open(self.cache_file_name, "wb") as f:
             pickle.dump(full_db, f)
 
         self.full_db = full_db
@@ -64,9 +66,11 @@ class VideoStore:
         print("found %i files" % len(self.local_db))
 
     def get_file_list(self):
-        with TT('sort by modification time'):
+        with TT("sort by modification time"):
             flist = [self.local_db[key] for key in self.local_db]
-            flist.sort(key=lambda el: el.stat.st_ctime, reverse=True)  # sort by modification time, newest fist
+            flist.sort(
+                key=lambda el: el.stat.st_ctime, reverse=True
+            )  # sort by modification time, newest fist
         return flist
 
     def retrieve_video_file(self, name: str) -> Union[VideoFile, None]:
@@ -79,14 +83,25 @@ class VideoStore:
         Recursively traverse directory tree and return list of files that have a valid extension.
         Returns: List of valid file paths relative to cwd.
         """
-        valid_extensions = ['.avi', '.asf', '.mp4', '.m4v', '.mov', '.flv', '.wmv', '.mkv']
+        valid_extensions = [
+            ".avi",
+            ".asf",
+            ".mp4",
+            ".m4v",
+            ".mov",
+            ".flv",
+            ".wmv",
+            ".mkv",
+        ]
 
         all_files = []
-        for dir_name, subdir_list, file_list in os.walk('.', followlinks=True):
+        for dir_name, subdir_list, file_list in os.walk(".", followlinks=True):
             for fname in file_list:
                 all_files.append(os.path.join(dir_name, fname))
 
         all_files = list(set(all_files))
-        all_files = [el for el in all_files if os.path.splitext(el)[1] in valid_extensions]
+        all_files = [
+            el for el in all_files if os.path.splitext(el)[1] in valid_extensions
+        ]
 
         return all_files
