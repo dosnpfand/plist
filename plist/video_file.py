@@ -11,6 +11,7 @@ class VideoFile:
 
     'some\\folder\\deine_mudda.mp4' --> ['some', 'folder', 'deine_mudda.mp4']
     """
+
     def __init__(self, path, get_duration=False):
         self.locale_path = path
         self.locale_separator = os.path.sep
@@ -27,7 +28,7 @@ class VideoFile:
     @property
     def canonical_path(self):
         tmp = self.locale_path.split(self.locale_separator)
-        if tmp[0] == '.':
+        if tmp[0] == ".":
             del tmp[0]
         return tuple(tmp)  # for dict
 
@@ -48,7 +49,7 @@ class VideoFile:
 
         if self.duration:
             minutes = self.duration.total_seconds() // 60
-            seconds = int(self.duration.total_seconds() - minutes*60)
+            seconds = int(self.duration.total_seconds() - minutes * 60)
         else:
             minutes = 0
             seconds = 0
@@ -59,7 +60,7 @@ class VideoFile:
         if len(self.path) >= max_path_len:
             tmp = os.path.normpath(self.path).split(os.sep)
 
-            for idx in range(len(tmp)-1):
+            for idx in range(len(tmp) - 1):
                 tmp[idx] = f"{tmp[idx][:sub_len]}...{tmp[idx][-sub_len:]}"
                 short_path = os.path.sep.join(tmp)
                 if len(short_path) <= max_path_len:
@@ -78,10 +79,13 @@ class VideoFile:
     def __repr__(self):
         return f"VideoFile({self.path})"
 
+
 # debug
-if __name__ == '__main__':
-    os.chdir(r'Z:\tmp\torrents')
-    vf = VideoFile(r'The Witcher (2019) Season 1 S01 1080p 10bit NF WEB-RIP x265  [Eng DD 5.1'
-                   r' - Hindi DD 768Kbps Org 5.1] ~ EmKayy\The Witcher S01E04 - Of Banquets, Bastards and Burials.mkv'
-                   , get_duration=True)
+if __name__ == "__main__":
+    os.chdir(r"Z:\tmp\torrents")
+    vf = VideoFile(
+        r"The Witcher (2019) Season 1 S01 1080p 10bit NF WEB-RIP x265  [Eng DD 5.1"
+        r" - Hindi DD 768Kbps Org 5.1] ~ EmKayy\The Witcher S01E04 - Of Banquets, Bastards and Burials.mkv",
+        get_duration=True,
+    )
     print(vf)

@@ -47,9 +47,12 @@ class VideoStore:
                 canonical_path = el.canonical_path
                 if canonical_path not in full_db:
                     modified = True
-                    el.get_stats()
-                    full_db[canonical_path] = el
-                    local_db[canonical_path] = el
+                    try:
+                        el.get_stats()
+                        full_db[canonical_path] = el
+                        local_db[canonical_path] = el
+                    except OSError:
+                        print(f"\nWARNING: Cannot parse {el}, not adding.")
                 else:
                     local_db[canonical_path] = full_db[canonical_path]
 
