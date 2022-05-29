@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "plist"
-version = "0.1.0"
+version = "0.1.1"
 description = "curses based interactive playlist creation for videos"
 authors = ["dominicmai <dr.dosn@gmail.com>"]
 license = "MIT"
