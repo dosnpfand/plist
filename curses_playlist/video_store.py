@@ -4,8 +4,8 @@ from typing import List, Union
 
 from tqdm import tqdm
 
-from plist.tools import StopWatch
-from plist.video_file import VideoFile
+from curses_playlist.tools import StopWatch
+from curses_playlist.video_file import VideoFile
 
 
 class VideoStore:

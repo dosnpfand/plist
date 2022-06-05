@@ -2,7 +2,7 @@ import os
 
 import click
 
-from plist.controller import PlistController
+from curses_playlist.controller import PlistController
 
 
 @click.command

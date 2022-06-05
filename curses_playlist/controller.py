@@ -1,11 +1,11 @@
 import curses
 import os
 
-from plist.curses_gui import MyCursesGUI
-from plist.gui_state import GUIState
-from plist.platform_defs import CMD, KEY_BACKSPACE
-from plist.video_file import VideoFile
-from plist.video_store import VideoStore
+from curses_playlist.curses_gui import MyCursesGUI
+from curses_playlist.gui_state import GUIState
+from curses_playlist.platform_defs import CMD, KEY_BACKSPACE
+from curses_playlist.video_file import VideoFile
+from curses_playlist.video_store import VideoStore
 
 
 class PlistController:

@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "plist"
+name = "curses-playlist"
 version = "0.1.1"
 description = "curses based interactive playlist creation for videos"
 authors = ["dominicmai <dr.dosn@gmail.com>"]
