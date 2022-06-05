@@ -31,3 +31,7 @@ In `CMD` mode you have the following options:
 * `p` play: start vlc player with playlist
 * `r` reset: reset the playlist
 * `q` quit: doing nothing
+
+# repo
+
+https://github.com/dosnpfand/curses-playlist

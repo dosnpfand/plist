@@ -1,9 +1,10 @@
 [tool.poetry]
 name = "curses-playlist"
-version = "0.1.1"
+version = "0.1.3"
 description = "curses based interactive playlist creation for videos"
 authors = ["dominicmai <dr.dosn@gmail.com>"]
 license = "MIT"
+readme = "README.md"
 
 [tool.poetry.dependencies]
 python = "^3.7"
@@ -18,4 +19,4 @@ requires = ["poetry-core>=1.0.0"]
 build-backend = "poetry.core.masonry.api"
 
 [tool.poetry.scripts]
-plist = 'plist.plist:main'
+plist = 'curses_playlist.plist:main'
