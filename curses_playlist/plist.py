@@ -7,7 +7,7 @@ from curses_playlist.controller import PlistController
 
 @click.command
 @click.option(
-    "--playlist", "-p", help="specify location to write playlist to", required=True
+    "--playlist", "-p", help="specify location to write playlist to", default="curses_playlist.m3u"
 )
 @click.option(
     "--working-directory", "-w", help="Where to look for video files", default="."
