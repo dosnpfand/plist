@@ -13,13 +13,16 @@ class PlistController:
     Controls GUI.
     """
 
-    def __init__(self, playlist_path: str):
+    def __init__(self, playlist_path: str, gain: float, clear_playlist: bool):
 
         self.playlist_path = playlist_path
+        self.gain = gain
         video_store = VideoStore()
 
         self.state = GUIState(video_store.get_file_list())
-        self.state.restore_from_playlist(playlist_path, video_store)
+
+        if not clear_playlist:
+            self.state.restore_from_playlist(playlist_path, video_store)
 
         self.gui = MyCursesGUI(self)
         self.gui.start()  # blocking.
@@ -32,7 +35,7 @@ class PlistController:
         if self.state.mode == GUIState.PLAY:
 
             self.write_playlist()
-            cmd = f"{CMD} {playlist_path}"
+            cmd = f"{CMD} --gain={self.gain} {playlist_path}"
             print(cmd)
             os.system(cmd)
 
