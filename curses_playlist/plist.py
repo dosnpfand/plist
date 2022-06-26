@@ -15,7 +15,7 @@ from curses_playlist.controller import PlistController
 @click.option(
     "--working-directory", "-w", help="Where to look for video files", default="."
 )
-@click.option("--gain", "-g", help="Volume gain for VLC start in [0, 1]", default=1.0)
+@click.option("--gain", "-g", help="Volume gain for VLC start in [-64, 0]", default=0)
 @click.option(
     "--clear-playlist", "-c", help="clear playlist", is_flag=True, default=False
 )

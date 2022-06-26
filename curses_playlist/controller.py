@@ -1,11 +1,42 @@
 import curses
 import os
+from contextlib import contextmanager
 
 from curses_playlist.curses_gui import MyCursesGUI
 from curses_playlist.gui_state import GUIState
 from curses_playlist.platform_defs import CMD, KEY_BACKSPACE
 from curses_playlist.video_file import VideoFile
 from curses_playlist.video_store import VideoStore
+
+
+@contextmanager
+def volume(vol: float):
+    """
+    Contextmanager for setting Master Windows Volume to a certain value and then returning
+    it to the previous volume using pycaw.
+
+    Args:
+        vol: in [-64, 0] which gets mapped to [0, 100] on my windows desktop.
+    """
+
+    if vol < -64 or vol > 0:
+        raise ValueError("gain must be in range [-64, 0]")
+
+    from ctypes import cast, POINTER
+    from comtypes import CLSCTX_ALL
+    from pycaw.pycaw import AudioUtilities, IAudioEndpointVolume
+
+    devices = AudioUtilities.GetSpeakers()
+    interface = devices.Activate(IAudioEndpointVolume._iid_, CLSCTX_ALL, None)
+    volume = cast(interface, POINTER(IAudioEndpointVolume))
+    current_vol = volume.GetMasterVolumeLevel()
+    res = volume.SetMasterVolumeLevel(vol, None)
+    print(f"setting MasterVolume to {vol} with res({res})")
+
+    yield
+
+    res = volume.SetMasterVolumeLevel(current_vol, None)
+    print(f"re-setting MasterVolume to {current_vol} with res({res})")
 
 
 class PlistController:
@@ -35,9 +66,10 @@ class PlistController:
         if self.state.mode == GUIState.PLAY:
 
             self.write_playlist()
-            cmd = f"{CMD} --gain={self.gain} {playlist_path}"
+            cmd = f"{CMD} {playlist_path}"
             print(cmd)
-            os.system(cmd)
+            with volume(self.gain):
+                os.system(cmd)
 
         # only write out playlist
         if self.state.mode == GUIState.WRITE:
