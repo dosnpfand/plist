@@ -23,6 +23,7 @@ def main(playlist: str, working_directory: str, gain: float, clear_playlist: boo
     if working_directory != ".":
         os.chdir(working_directory)
 
+    print(f"gain: {gain}")
     PlistController(playlist, gain, clear_playlist)
 
 

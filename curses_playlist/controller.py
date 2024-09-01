@@ -3,6 +3,7 @@ import os
 from contextlib import contextmanager
 
 from curses_playlist.curses_gui import MyCursesGUI
+from curses_playlist.flask_controller import flask_vlc_context
 from curses_playlist.gui_state import GUIState
 from curses_playlist.platform_defs import CMD, KEY_BACKSPACE
 from curses_playlist.video_file import VideoFile
@@ -68,7 +69,7 @@ class PlistController:
             self.write_playlist()
             cmd = f"{CMD} {playlist_path}"
             print(cmd)
-            with volume(self.gain):
+            with volume(self.gain), flask_vlc_context():
                 os.system(cmd)
 
         # only write out playlist
