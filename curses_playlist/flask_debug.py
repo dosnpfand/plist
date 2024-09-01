@@ -23,12 +23,3 @@ def send_command(command):
 if __name__ == "__main__":
 
     send_command("stop")
-    # send_command("asdf")
-
-    # # Test commands to send to the Flask server
-    # commands = ["play", "pause", "stop", "next", "previous"]
-
-    # # Loop through the commands and send each one
-    # for cmd in commands:
-    #     print(f"Sending command: {cmd}")
-    #     send_command(cmd)

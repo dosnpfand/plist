@@ -1,6 +1,6 @@
 import threading
 from contextlib import contextmanager
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, render_template, request
 from werkzeug.serving import make_server
 
 
@@ -10,7 +10,7 @@ class ServerThread(threading.Thread):
 
     def __init__(self, app):
         threading.Thread.__init__(self)
-        self.server = make_server('127.0.0.1', 5000, app)
+        self.server = make_server('0.0.0.0', 5000, app)
         self.ctx = app.app_context()
         self.ctx.push()
 
@@ -75,6 +75,13 @@ def control_vlc():
     # Execute the corresponding VLC control command
     run_command(COMMANDS[command])
     return jsonify({"message": f"Executed command: {command}"}), 200
+
+
+@app.route('/', methods=['GET'])
+def control_page():
+    # Render the control.html file from the templates directory
+    return render_template('control.html')
+
 
 def run_flask_server():
     """
