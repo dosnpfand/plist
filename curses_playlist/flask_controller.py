@@ -24,9 +24,10 @@ class ServerThread(threading.Thread):
 # VLC control commands mapping
 COMMANDS = {
     'pause': 'pause\n',
-    'stop': 'stop\n',
+    'stop': 'stop',
     'next': 'next\n',
-    'previous': 'prev\n'
+    'previous': 'prev\n',
+    'fullscreen': 'f',
 }
 
 import socket
@@ -38,6 +39,7 @@ def run_command(command):
     host = 'localhost'
     port = 44500
     command = command.strip()
+    print(f"looking up {command}")
 
 
     # Convert the command to the VLC remote control command
@@ -73,7 +75,7 @@ def control_vlc():
         return jsonify({"error": "Invalid command"}), 400
 
     # Execute the corresponding VLC control command
-    run_command(COMMANDS[command])
+    run_command(command)
     return jsonify({"message": f"Executed command: {command}"}), 200
 
 
@@ -104,3 +106,4 @@ def flask_vlc_context():
         # Cleanup: stop Flask server and VLC
         print("Shutting down Flask server and VLC")
         server.shutdown()
+        print("done.")

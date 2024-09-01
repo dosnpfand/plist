@@ -22,4 +22,4 @@ def send_command(command):
 
 if __name__ == "__main__":
 
-    send_command("stop")
+    send_command("fullscreen")
