@@ -1,10 +1,25 @@
-import subprocess
 import threading
-import time
 from contextlib import contextmanager
 from flask import Flask, jsonify, request
+from werkzeug.serving import make_server
+
 
 app = Flask(__name__)
+
+class ServerThread(threading.Thread):
+
+    def __init__(self, app):
+        threading.Thread.__init__(self)
+        self.server = make_server('127.0.0.1', 5000, app)
+        self.ctx = app.app_context()
+        self.ctx.push()
+
+    def run(self):
+        print('starting server')
+        self.server.serve_forever()
+
+    def shutdown(self):
+        self.server.shutdown()
 
 # VLC control commands mapping
 COMMANDS = {
@@ -72,21 +87,13 @@ def flask_vlc_context():
     """
     Context manager that runs a Flask server to control VLC while active.
     """
-    # Start the VLC server in rc (remote control) mode
-    # vlc_process = subprocess.Popen(COMMANDS['play'], shell=True)
-    # print("VLC started with remote control")
-
-    # Start the Flask server in a separate thread
     print("starting Flask server")
-    server_thread = threading.Thread(target=run_flask_server)
-    server_thread.start()
+    server = ServerThread(app)
+    server.start()
 
     try:
         yield  # Run the context block while Flask server is running
     finally:
         # Cleanup: stop Flask server and VLC
         print("Shutting down Flask server and VLC")
-        # vlc_process.terminate()
-        run_command(COMMANDS['stop'])
-        server_thread.join()
-        print("Cleanup complete")
+        server.shutdown()
