@@ -6,6 +6,7 @@ from curses_playlist.curses_gui import MyCursesGUI
 from curses_playlist.flask_controller import flask_vlc_context
 from curses_playlist.gui_state import GUIState
 from curses_playlist.platform_defs import CMD, KEY_BACKSPACE
+from curses_playlist.tools import start_blank_screen
 from curses_playlist.video_file import VideoFile
 from curses_playlist.video_store import VideoStore
 
@@ -67,6 +68,7 @@ class PlistController:
         if self.state.mode == GUIState.PLAY:
 
             self.write_playlist()
+            start_blank_screen()  # windowed playback on black screen.
             cmd = f"{CMD} {playlist_path}"
             print(cmd)
             with volume(self.gain), flask_vlc_context():

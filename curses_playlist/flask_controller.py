@@ -1,7 +1,10 @@
+import ctypes
 import threading
 from contextlib import contextmanager
 from flask import Flask, jsonify, render_template, request
 from werkzeug.serving import make_server
+
+from curses_playlist.tools import blank_screen, start_blank_screen
 
 
 app = Flask(__name__)
@@ -71,6 +74,10 @@ def control_vlc():
 
     print(f"received cmd request: {command}")
 
+    if command == "stop":
+        # ctypes.windll.user32.SendMessageW(0xFFFF, 0x0112, 0xF170, 2)  # turn off display
+        start_blank_screen(True)
+
     if command not in COMMANDS:
         return jsonify({"error": "Invalid command"}), 400
 
@@ -96,9 +103,10 @@ def flask_vlc_context():
     """
     Context manager that runs a Flask server to control VLC while active.
     """
-    print("starting Flask server")
+    print("starting Flask server...")
     server = ServerThread(app)
     server.start()
+    print("Server up.")
 
     try:
         yield  # Run the context block while Flask server is running
